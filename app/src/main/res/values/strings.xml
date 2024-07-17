@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CatassJetpackCompose</string>
+    <string name="pets">Pets</string>
+</resources>
