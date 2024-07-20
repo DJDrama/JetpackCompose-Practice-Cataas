@@ -1,4 +1,4 @@
-package com.dj.android.catassjetpackcompose.presentation.ui.theme
+package com.dj.android.catassjetpackcompose.presentation.theme
 
 import android.app.Activity
 import android.os.Build

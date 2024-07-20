@@ -75,4 +75,8 @@ dependencies {
 
     implementation(libs.bundles.networking)
     implementation(libs.bundles.koin.compose)
+
+    implementation(libs.compose.navigation)
+    implementation(libs.compose.window.size)
+    implementation(libs.androidx.window)
 }

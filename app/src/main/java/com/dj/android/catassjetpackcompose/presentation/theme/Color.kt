@@ -1,4 +1,4 @@
-package com.dj.android.catassjetpackcompose.presentation.ui.theme
+package com.dj.android.catassjetpackcompose.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

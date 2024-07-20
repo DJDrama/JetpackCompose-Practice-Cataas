@@ -21,13 +21,14 @@ import com.dj.android.catassjetpackcompose.data.model.Cat
 @Composable
 fun PetListItem(
     modifier: Modifier = Modifier,
-    cat: Cat
+    cat: Cat,
+    onPetClicked: (Cat) -> Unit,
 ) {
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(all = 6.dp),
-        onClick = { /*TODO*/ }) {
+        onClick = { onPetClicked(cat) }) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
