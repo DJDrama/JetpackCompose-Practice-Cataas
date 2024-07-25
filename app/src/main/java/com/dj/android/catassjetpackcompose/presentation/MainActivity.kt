@@ -21,6 +21,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.dj.android.catassjetpackcompose.data.workers.PetsSyncWorker
 import com.dj.android.catassjetpackcompose.presentation.navigation.AppNavigation
 import com.dj.android.catassjetpackcompose.presentation.navigation.AppNavigationContent
 import com.dj.android.catassjetpackcompose.presentation.navigation.ContentType
@@ -42,6 +49,7 @@ class MainActivity : ComponentActivity() {
     @ExperimentalMaterial3Api
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        startPetsSync()
         enableEdgeToEdge()
         val deviceFoldingPostureFlow = WindowInfoTracker
             .getOrCreate(this).windowLayoutInfo(this)
@@ -158,5 +166,22 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    // JUST FOR TESTING - should be in data layer
+    private fun startPetsSync() {
+        val syncPetsWorkRequest = OneTimeWorkRequestBuilder<PetsSyncWorker>()
+            .setConstraints(
+                constraints = Constraints.Builder()
+                    .setRequiredNetworkType(networkType = NetworkType.CONNECTED)
+                    .setRequiresBatteryNotLow(requiresBatteryNotLow = true)
+                    .build()
+            )
+            .build()
+        WorkManager.getInstance(applicationContext)
+            .enqueueUniqueWork(/* uniqueWorkName = */ "PetsSyncWorker",
+                /* existingWorkPolicy = */ ExistingWorkPolicy.KEEP,
+                /* work = */ syncPetsWorkRequest
+            )
     }
 }

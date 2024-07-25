@@ -26,6 +26,7 @@ import com.dj.android.catassjetpackcompose.presentation.pets.components.PetListI
 fun PetsScreenContent(
     modifier: Modifier = Modifier,
     onPetClicked: (Cat) -> Unit,
+    onFavoriteClicked: (Cat) -> Unit,
     contentType: ContentType,
     uiState: PetsUiState,
 ) {
@@ -43,11 +44,13 @@ fun PetsScreenContent(
                 PetList(
                     onPetClicked = onPetClicked,
                     pets = uiState.pets,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    onFavoriteClicked = onFavoriteClicked
                 )
             } else {
                 PetListAndDetails(
-                    pets = uiState.pets
+                    pets = uiState.pets,
+                    onFavoriteClicked = onFavoriteClicked
                 )
             }
         }
@@ -58,16 +61,28 @@ fun PetsScreenContent(
 }
 
 @Composable
-fun PetList(modifier: Modifier = Modifier, onPetClicked: (Cat) -> Unit, pets: List<Cat>) {
+fun PetList(
+    modifier: Modifier = Modifier,
+    onPetClicked: (Cat) -> Unit,
+    pets: List<Cat>,
+    onFavoriteClicked: (Cat) -> Unit
+) {
     LazyColumn(modifier = modifier) {
         items(items = pets) { pet ->
-            PetListItem(cat = pet, onPetClicked = onPetClicked)
+            PetListItem(
+                cat = pet,
+                onPetClicked = onPetClicked,
+                onFavoriteClicked = onFavoriteClicked,
+            )
         }
     }
 }
 
 @Composable
-fun PetListAndDetails(pets: List<Cat>) {
+fun PetListAndDetails(
+    pets: List<Cat>,
+    onFavoriteClicked: (Cat) -> Unit
+) {
     var currentPet by remember {
         mutableStateOf(pets.first())
     }
@@ -83,7 +98,8 @@ fun PetListAndDetails(pets: List<Cat>) {
             pets = pets,
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .weight(1f),
+            onFavoriteClicked = onFavoriteClicked
         )
         PetDetailsScreenContent(
             modifier = Modifier

@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.jetbrains.kotlin.plugin.serialization)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.googleDevToolsKsp)
+
 }
 
 android {
@@ -50,6 +52,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
 }
 
 dependencies {
@@ -79,4 +85,11 @@ dependencies {
     implementation(libs.compose.navigation)
     implementation(libs.compose.window.size)
     implementation(libs.androidx.window)
+
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    implementation(libs.work.runtime)
+    androidTestImplementation(libs.work.testing)
 }

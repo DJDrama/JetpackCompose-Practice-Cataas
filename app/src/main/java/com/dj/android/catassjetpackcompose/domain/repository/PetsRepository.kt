@@ -1,8 +1,12 @@
 package com.dj.android.catassjetpackcompose.domain.repository
 
 import com.dj.android.catassjetpackcompose.data.model.Cat
-import com.dj.android.catassjetpackcompose.domain.utils.Result
+import kotlinx.coroutines.flow.Flow
 
 interface PetsRepository {
-    suspend fun getPets(): Result<List<Cat>>
+    fun getPets(): Flow<List<Cat>>
+    suspend fun fetchRemoteCats()
+
+    suspend fun updateCat(cat: Cat)
+    fun getFavoritePets(): Flow<List<Cat>>
 }
