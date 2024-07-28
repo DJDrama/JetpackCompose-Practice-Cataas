@@ -2,4 +2,9 @@
     <string name="app_name">CatassJetpackCompose</string>
     <string name="pets">Pets</string>
     <string name="favorite">Favorite</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="requires_location_permission">This app requires the location permission to be granted.</string>
+    <string name="grant_access">Grant Access</string>
+    <string name="cancel">Cancel</string>
+    <string name="permission_granted">Location Permission Granted!</string>
 </resources>
