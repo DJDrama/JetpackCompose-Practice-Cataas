@@ -37,11 +37,13 @@ import com.dj.android.catassjetpackcompose.presentation.navigation.Screens
 import com.dj.android.catassjetpackcompose.presentation.navigation.isBookPosture
 import com.dj.android.catassjetpackcompose.presentation.navigation.isSeparating
 import com.dj.android.catassjetpackcompose.presentation.theme.CatassJetpackComposeTheme
+//import com.dj.android.catassjetpackcompose.test.LeakTestUtils
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import leakcanary.AppWatcher
 import org.koin.compose.rememberCurrentKoinScope
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -51,6 +53,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         startPetsSync()
         enableEdgeToEdge()
+
+        // Testing Memory Leak
+        /*AppWatcher.objectWatcher.expectWeaklyReachable(
+            LeakTestUtils.leakCanaryTest,
+            "Static reference to LeakCanaryTest"
+        )*/
+
         val deviceFoldingPostureFlow = WindowInfoTracker
             .getOrCreate(this).windowLayoutInfo(this)
             .flowWithLifecycle(this.lifecycle)

@@ -92,4 +92,9 @@ dependencies {
 
     implementation(libs.work.runtime)
     androidTestImplementation(libs.work.testing)
+
+    debugImplementation(libs.leakcanary.android)
+
+    debugImplementation(libs.chucker.library)
+    releaseImplementation(libs.chucker.library.no.op)
 }
