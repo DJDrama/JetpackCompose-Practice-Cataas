@@ -19,7 +19,7 @@ fun AppNavigationContent(
     onFavoriteClicked: () -> Unit,
     onHomeClicked: () -> Unit,
     navHostController: NavHostController,
-    onDrawerClicked: () -> Unit = {}
+    onDrawerClicked: () -> Unit = {},
 ) {
     Row(
         modifier = Modifier.fillMaxSize(),
@@ -28,7 +28,7 @@ fun AppNavigationContent(
             PetsNavigationRail(
                 onFavoriteClicked = onFavoriteClicked,
                 onHomeClicked = onHomeClicked,
-                onDrawerClicked = onDrawerClicked
+                onDrawerClicked = onDrawerClicked,
             )
         }
         Scaffold(
@@ -36,22 +36,22 @@ fun AppNavigationContent(
                 AnimatedVisibility(visible = navigationType == NavigationType.BottomNavigation) {
                     PetsBottomNavigationBar(
                         onFavoriteClicked = onFavoriteClicked,
-                        onHomeClicked = onHomeClicked
+                        onHomeClicked = onHomeClicked,
                     )
                 }
-            }
+            },
         ) { paddingValues ->
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
             ) {
                 AppNavigation(
                     contentType = contentType,
-                    navController = navHostController
+                    navController = navHostController,
                 )
             }
         }
     }
-
 }

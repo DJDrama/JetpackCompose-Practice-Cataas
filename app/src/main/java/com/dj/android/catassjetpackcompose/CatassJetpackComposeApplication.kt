@@ -6,13 +6,11 @@ import com.dj.android.catassjetpackcompose.data.di.networkModule
 import com.dj.android.catassjetpackcompose.data.di.repositoryModule
 import com.dj.android.catassjetpackcompose.domain.di.dispatcherModule
 import com.dj.android.catassjetpackcompose.presentation.di.viewModelModule
-import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.koin.workManagerFactory
 import org.koin.core.context.startKoin
 
 class CatassJetpackComposeApplication : Application() {
-
     override fun onCreate() {
         super.onCreate()
         startKoin {
@@ -23,7 +21,7 @@ class CatassJetpackComposeApplication : Application() {
                 repositoryModule,
                 viewModelModule,
                 dispatcherModule,
-                databaseModule
+                databaseModule,
             )
         }
     }

@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import java.io.IOException
 
 class PetsRepositoryImpl : PetsRepository {
     private val catsAPI: CatsAPI
@@ -31,13 +32,14 @@ class PetsRepositoryImpl : PetsRepository {
                         owner = catEntity.owner,
                         tags = catEntity.tags,
                         createdAt = catEntity.createdAt,
-                        updatedAt = catEntity.updatedAt
+                        updatedAt = catEntity.updatedAt,
                     )
                 }
             }
             .onEach {
-                if (it.isEmpty())
+                if (it.isEmpty()) {
                     fetchRemoteCats()
+                }
             }
     }
 
@@ -52,28 +54,31 @@ class PetsRepositoryImpl : PetsRepository {
                             owner = it.owner,
                             tags = it.tags,
                             createdAt = it.createdAt,
-                            updatedAt = it.updatedAt
-                        )
+                            updatedAt = it.updatedAt,
+                        ),
                     )
                 }
             } else {
-                throw IllegalStateException()
+                error("Response is not successful")
             }
-        } catch (e: Exception) {
+        } catch (e: IOException) {
+            Result.Error(error = e.message ?: "Unknown Error")
+        } catch(e: IllegalStateException){
             Result.Error(error = e.message ?: "Unknown Error")
         }
     }
 
     override suspend fun updateCat(cat: Cat) {
         catDao.update(
-            catEntity = CatEntity(
-                id = cat.id,
-                owner = cat.owner,
-                tags = cat.tags,
-                createdAt = cat.createdAt,
-                updatedAt = cat.updatedAt,
-                isFavorite = cat.isFavorite
-            )
+            catEntity =
+                CatEntity(
+                    id = cat.id,
+                    owner = cat.owner,
+                    tags = cat.tags,
+                    createdAt = cat.createdAt,
+                    updatedAt = cat.updatedAt,
+                    isFavorite = cat.isFavorite,
+                ),
         )
     }
 
@@ -86,7 +91,7 @@ class PetsRepositoryImpl : PetsRepository {
                     tags = it.tags,
                     createdAt = it.createdAt,
                     updatedAt = it.updatedAt,
-                    isFavorite = it.isFavorite
+                    isFavorite = it.isFavorite,
                 )
             }
         }

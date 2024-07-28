@@ -19,7 +19,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun FavoritePetsScreen(
     onPetClicked: (Cat) -> Unit,
-    petsViewModel: PetsViewModel = koinViewModel()
+    petsViewModel: PetsViewModel = koinViewModel(),
 ) {
     LaunchedEffect(Unit) {
         petsViewModel.getFavoritePets()
@@ -28,17 +28,19 @@ fun FavoritePetsScreen(
     val pets = uiState.favorites
     if (pets.isEmpty()) {
         Column(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(text = "No favorite pets")
         }
     } else {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .fillMaxSize(),
         ) {
             items(pets) { pet ->
                 PetListItem(
@@ -46,10 +48,9 @@ fun FavoritePetsScreen(
                     onPetClicked = onPetClicked,
                     onFavoriteClicked = {
                         petsViewModel.updateCat(it)
-                    }
+                    },
                 )
             }
         }
     }
-
 }

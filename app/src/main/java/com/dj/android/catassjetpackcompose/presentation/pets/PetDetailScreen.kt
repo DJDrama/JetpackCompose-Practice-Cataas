@@ -29,59 +29,71 @@ import coil.compose.AsyncImage
 import com.dj.android.catassjetpackcompose.data.model.Cat
 
 @Composable
-fun PetDetailsScreen( cat: Cat, onBackPressed: () -> Unit,) {
+fun PetDetailsScreen(
+    cat: Cat,
+    onBackPressed: () -> Unit,
+) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = "Pet Details") },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                ),
+            TopAppBar(
+                title = { Text(text = "Pet Details") },
+                colors =
+                    TopAppBarDefaults.smallTopAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                    ),
                 navigationIcon = {
                     IconButton(onClick = onBackPressed) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                     }
-                }
+                },
             )
         },
         content = { paddingValues ->
             PetDetailsScreenContent(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(paddingValues),
-                cat = cat
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(paddingValues),
+                cat = cat,
             )
-        }
+        },
     )
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun PetDetailsScreenContent(modifier: Modifier, cat: Cat) {
+fun PetDetailsScreenContent(
+    modifier: Modifier,
+    cat: Cat,
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AsyncImage(
             model = "https://cataas.com/cat/${cat.id}",
             contentDescription = "Cute cat",
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp),
-            contentScale = ContentScale.FillWidth
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+            contentScale = ContentScale.FillWidth,
         )
         FlowRow(
-            modifier = Modifier
-                .padding(start = 6.dp, end = 6.dp)
+            modifier =
+                Modifier
+                    .padding(start = 6.dp, end = 6.dp),
         ) {
             repeat(cat.tags.size) {
                 SuggestionChip(
-                    modifier = Modifier
-                        .padding(start = 3.dp, end = 3.dp),
+                    modifier =
+                        Modifier
+                            .padding(start = 3.dp, end = 3.dp),
                     onClick = { },
                     label = {
                         Text(text = cat.tags[it])
-                    }
+                    },
                 )
             }
         }

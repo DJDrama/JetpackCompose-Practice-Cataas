@@ -30,11 +30,10 @@ fun PetsScreenContent(
     contentType: ContentType,
     uiState: PetsUiState,
 ) {
-
     Column(
         modifier = modifier.padding(all = 16.dp),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AnimatedVisibility(visible = uiState.isLoading) {
             CircularProgressIndicator()
@@ -45,12 +44,12 @@ fun PetsScreenContent(
                     onPetClicked = onPetClicked,
                     pets = uiState.pets,
                     modifier = Modifier.fillMaxWidth(),
-                    onFavoriteClicked = onFavoriteClicked
+                    onFavoriteClicked = onFavoriteClicked,
                 )
             } else {
                 PetListAndDetails(
                     pets = uiState.pets,
-                    onFavoriteClicked = onFavoriteClicked
+                    onFavoriteClicked = onFavoriteClicked,
                 )
             }
         }
@@ -65,7 +64,7 @@ fun PetList(
     modifier: Modifier = Modifier,
     onPetClicked: (Cat) -> Unit,
     pets: List<Cat>,
-    onFavoriteClicked: (Cat) -> Unit
+    onFavoriteClicked: (Cat) -> Unit,
 ) {
     LazyColumn(modifier = modifier) {
         items(items = pets) { pet ->
@@ -81,32 +80,35 @@ fun PetList(
 @Composable
 fun PetListAndDetails(
     pets: List<Cat>,
-    onFavoriteClicked: (Cat) -> Unit
+    onFavoriteClicked: (Cat) -> Unit,
 ) {
     var currentPet by remember {
         mutableStateOf(pets.first())
     }
     Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        modifier =
+            Modifier
+                .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         PetList(
             onPetClicked = {
                 currentPet = it
             },
             pets = pets,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            onFavoriteClicked = onFavoriteClicked
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+            onFavoriteClicked = onFavoriteClicked,
         )
         PetDetailsScreenContent(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .weight(1f),
-            cat = currentPet
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .weight(1f),
+            cat = currentPet,
         )
     }
 }

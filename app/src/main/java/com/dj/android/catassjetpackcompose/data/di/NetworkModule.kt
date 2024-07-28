@@ -13,40 +13,42 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
-
-val networkModule = module {
-    single {
-        Retrofit.Builder()
-            .addConverterFactory(
-                Json {
-                    ignoreUnknownKeys = true
-                }.asConverterFactory(contentType = "application/json".toMediaType())
-            )
-            .baseUrl("https://cataas.com/api/")
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor(
-                        ChuckerInterceptor.Builder(androidContext())
-                            .collector(ChuckerCollector(
-                                context = androidContext(),
-                                showNotification=true,
-                                retentionPeriod = RetentionManager.Period.ONE_HOUR
-                            ))
-                            .maxContentLength(250_000L)
-                            .redactHeaders(emptySet())
-                            .alwaysReadResponseBody(false)
-                            .build()
-                    )
-                    .addInterceptor(
-                        HttpLoggingInterceptor().apply{
-                            level = HttpLoggingInterceptor.Level.BODY
-                        }
-                    )
-                    .build()
-            )
-            .build()
+val networkModule =
+    module {
+        single {
+            Retrofit.Builder()
+                .addConverterFactory(
+                    Json {
+                        ignoreUnknownKeys = true
+                    }.asConverterFactory(contentType = "application/json".toMediaType()),
+                )
+                .baseUrl("https://cataas.com/api/")
+                .client(
+                    OkHttpClient.Builder()
+                        .addInterceptor(
+                            ChuckerInterceptor.Builder(androidContext())
+                                .collector(
+                                    ChuckerCollector(
+                                        context = androidContext(),
+                                        showNotification = true,
+                                        retentionPeriod = RetentionManager.Period.ONE_HOUR,
+                                    ),
+                                )
+                                .maxContentLength(250_000L)
+                                .redactHeaders(emptySet())
+                                .alwaysReadResponseBody(false)
+                                .build(),
+                        )
+                        .addInterceptor(
+                            HttpLoggingInterceptor().apply {
+                                level = HttpLoggingInterceptor.Level.BODY
+                            },
+                        )
+                        .build(),
+                )
+                .build()
+        }
+        single {
+            get<Retrofit>().create(CatsAPI::class.java)
+        }
     }
-    single {
-        get<Retrofit>().create(CatsAPI::class.java)
-    }
-}

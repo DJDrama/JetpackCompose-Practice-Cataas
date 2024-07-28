@@ -31,58 +31,63 @@ import com.dj.android.catassjetpackcompose.data.model.Cat
 
 @Composable
 fun PetListItem(
-    modifier: Modifier = Modifier,
     cat: Cat,
     onPetClicked: (Cat) -> Unit,
     onFavoriteClicked: (Cat) -> Unit,
 ) {
     ElevatedCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(all = 6.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(all = 6.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp)
-                .clickable {
-                    onPetClicked(cat)
-                }
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp)
+                    .clickable {
+                        onPetClicked(cat)
+                    },
         ) {
             AsyncImage(
                 model = "https://cataas.com/cat/${cat.id}",
                 contentDescription = "Cat Image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(height = 200.dp),
-                contentScale = ContentScale.FillWidth
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(height = 200.dp),
+                contentScale = ContentScale.FillWidth,
             )
             Row(
-                modifier = Modifier
-                    .padding(horizontal = 6.dp)
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 6.dp)
+                        .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-
                 FlowRow(
-                    modifier = Modifier.padding(horizontal = 6.dp)
+                    modifier = Modifier.padding(horizontal = 6.dp),
                 ) {
                     repeat(times = cat.tags.size) {
                         SuggestionChip(
                             modifier = Modifier.padding(horizontal = 3.dp),
-                            onClick = { /*TODO*/ }, label = {
+                            onClick = { /*TODO*/ },
+                            label = {
                                 Text(text = cat.tags[it])
-                            })
+                            },
+                        )
                     }
                 }
                 Icon(
-                    modifier = Modifier.clickable {
-                        onFavoriteClicked(cat.copy(isFavorite = !cat.isFavorite))
-                    },
+                    modifier =
+                        Modifier.clickable {
+                            onFavoriteClicked(cat.copy(isFavorite = !cat.isFavorite))
+                        },
                     imageVector = if (cat.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = stringResource(id = R.string.favorite),
-                    tint = if (cat.isFavorite) Color.Red else Color.Gray
+                    tint = if (cat.isFavorite) Color.Red else Color.Gray,
                 )
             }
         }

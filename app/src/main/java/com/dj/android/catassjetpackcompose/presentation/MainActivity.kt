@@ -24,11 +24,9 @@ import androidx.window.layout.WindowInfoTracker
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.dj.android.catassjetpackcompose.data.workers.PetsSyncWorker
-import com.dj.android.catassjetpackcompose.presentation.navigation.AppNavigation
 import com.dj.android.catassjetpackcompose.presentation.navigation.AppNavigationContent
 import com.dj.android.catassjetpackcompose.presentation.navigation.ContentType
 import com.dj.android.catassjetpackcompose.presentation.navigation.DeviceFoldPosture
@@ -37,14 +35,11 @@ import com.dj.android.catassjetpackcompose.presentation.navigation.Screens
 import com.dj.android.catassjetpackcompose.presentation.navigation.isBookPosture
 import com.dj.android.catassjetpackcompose.presentation.navigation.isSeparating
 import com.dj.android.catassjetpackcompose.presentation.theme.CatassJetpackComposeTheme
-//import com.dj.android.catassjetpackcompose.test.LeakTestUtils
+// import com.dj.android.catassjetpackcompose.test.LeakTestUtils
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import leakcanary.AppWatcher
-import org.koin.compose.rememberCurrentKoinScope
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 class MainActivity : ComponentActivity() {
@@ -60,32 +55,33 @@ class MainActivity : ComponentActivity() {
             "Static reference to LeakCanaryTest"
         )*/
 
-        val deviceFoldingPostureFlow = WindowInfoTracker
-            .getOrCreate(this).windowLayoutInfo(this)
-            .flowWithLifecycle(this.lifecycle)
-            .map { layoutInfo ->
-                val foldingFeature =
-                    layoutInfo.displayFeatures
-                        .filterIsInstance<FoldingFeature>()
-                        .firstOrNull()
-                when {
-                    isBookPosture(foldingFeature) ->
-                        DeviceFoldPosture.BookPosture(hingePosition = foldingFeature.bounds)
+        val deviceFoldingPostureFlow =
+            WindowInfoTracker
+                .getOrCreate(this).windowLayoutInfo(this)
+                .flowWithLifecycle(this.lifecycle)
+                .map { layoutInfo ->
+                    val foldingFeature =
+                        layoutInfo.displayFeatures
+                            .filterIsInstance<FoldingFeature>()
+                            .firstOrNull()
+                    when {
+                        isBookPosture(foldingFeature) ->
+                            DeviceFoldPosture.BookPosture(hingePosition = foldingFeature.bounds)
 
-                    isSeparating(foldingFeature) ->
-                        DeviceFoldPosture.SeparatingPosture(
-                            hingePosition = foldingFeature.bounds,
-                            orientation = foldingFeature.orientation
-                        )
+                        isSeparating(foldingFeature) ->
+                            DeviceFoldPosture.SeparatingPosture(
+                                hingePosition = foldingFeature.bounds,
+                                orientation = foldingFeature.orientation,
+                            )
 
-                    else -> DeviceFoldPosture.NormalPosture
+                        else -> DeviceFoldPosture.NormalPosture
+                    }
                 }
-            }
-            .stateIn(
-                scope = lifecycleScope,
-                started = SharingStarted.Eagerly,
-                initialValue = DeviceFoldPosture.NormalPosture
-            )
+                .stateIn(
+                    scope = lifecycleScope,
+                    started = SharingStarted.Eagerly,
+                    initialValue = DeviceFoldPosture.NormalPosture,
+                )
         setContent {
             val devicePosture = deviceFoldingPostureFlow.collectAsStateWithLifecycle().value
             val windowSizeClass = calculateWindowSizeClass(activity = this)
@@ -104,7 +100,8 @@ class MainActivity : ComponentActivity() {
                     WindowWidthSizeClass.Medium -> {
                         navigationType = NavigationType.NavigationRail
                         contentType =
-                            if (devicePosture is DeviceFoldPosture.BookPosture || devicePosture is DeviceFoldPosture.SeparatingPosture) {
+                            if (devicePosture is DeviceFoldPosture.BookPosture
+                                || devicePosture is DeviceFoldPosture.SeparatingPosture) {
                                 ContentType.ListAndDetail
                             } else {
                                 ContentType.List
@@ -112,11 +109,12 @@ class MainActivity : ComponentActivity() {
                     }
 
                     WindowWidthSizeClass.Expanded -> {
-                        navigationType = if (devicePosture is DeviceFoldPosture.BookPosture) {
-                            NavigationType.NavigationRail
-                        } else {
-                            NavigationType.NavigationDrawer
-                        }
+                        navigationType =
+                            if (devicePosture is DeviceFoldPosture.BookPosture) {
+                                NavigationType.NavigationRail
+                            } else {
+                                NavigationType.NavigationDrawer
+                            }
                         contentType = ContentType.ListAndDetail
                     }
 
@@ -130,7 +128,8 @@ class MainActivity : ComponentActivity() {
                         PermanentDrawerSheet {
                             PetsNavigationDrawer(
                                 onFavoriteClicked = { navController.navigate(Screens.FavoritePetsScreen.route) },
-                                onHomeClicked = { navController.navigate(Screens.PetsScreen.route) })
+                                onHomeClicked = { navController.navigate(Screens.PetsScreen.route) },
+                            )
                         }
                     }) {
                         AppNavigationContent(
@@ -138,7 +137,7 @@ class MainActivity : ComponentActivity() {
                             navigationType = navigationType,
                             onFavoriteClicked = { navController.navigate(Screens.FavoritePetsScreen.route) },
                             onHomeClicked = { navController.navigate(Screens.PetsScreen.route) },
-                            navHostController = navController
+                            navHostController = navController,
                         )
                     }
                 } else {
@@ -152,11 +151,11 @@ class MainActivity : ComponentActivity() {
                                         scope.launch {
                                             drawerState.close()
                                         }
-                                    }
+                                    },
                                 )
                             }
                         },
-                        drawerState = drawerState
+                        drawerState = drawerState,
                     ) {
                         AppNavigationContent(
                             contentType = contentType,
@@ -168,9 +167,8 @@ class MainActivity : ComponentActivity() {
                                 scope.launch {
                                     drawerState.open()
                                 }
-                            }
+                            },
                         )
-
                     }
                 }
             }
@@ -179,18 +177,24 @@ class MainActivity : ComponentActivity() {
 
     // JUST FOR TESTING - should be in data layer
     private fun startPetsSync() {
-        val syncPetsWorkRequest = OneTimeWorkRequestBuilder<PetsSyncWorker>()
-            .setConstraints(
-                constraints = Constraints.Builder()
-                    .setRequiredNetworkType(networkType = NetworkType.CONNECTED)
-                    .setRequiresBatteryNotLow(requiresBatteryNotLow = true)
-                    .build()
-            )
-            .build()
+        val syncPetsWorkRequest =
+            OneTimeWorkRequestBuilder<PetsSyncWorker>()
+                .setConstraints(
+                    constraints =
+                        Constraints.Builder()
+                            .setRequiredNetworkType(networkType = NetworkType.CONNECTED)
+                            .setRequiresBatteryNotLow(requiresBatteryNotLow = true)
+                            .build(),
+                )
+                .build()
         WorkManager.getInstance(applicationContext)
-            .enqueueUniqueWork(/* uniqueWorkName = */ "PetsSyncWorker",
-                /* existingWorkPolicy = */ ExistingWorkPolicy.KEEP,
-                /* work = */ syncPetsWorkRequest
+            .enqueueUniqueWork(
+                // uniqueWorkName =
+                "PetsSyncWorker",
+                // existingWorkPolicy =
+                ExistingWorkPolicy.KEEP,
+                // work =
+                syncPetsWorkRequest,
             )
     }
 }

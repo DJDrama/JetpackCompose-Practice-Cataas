@@ -21,25 +21,31 @@ import coil.compose.AsyncImage
 import com.dj.android.catassjetpackcompose.data.model.Cat
 
 @Composable
-fun PetDetailScreenContent(modifier: Modifier, cat: Cat) {
+fun PetDetailScreenContent(
+    modifier: Modifier,
+    cat: Cat,
+) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(16.dp),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AsyncImage(
             model = "https://cataas.com/cat/${cat.id}",
             contentDescription = "Cute cat",
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp),
-            contentScale = ContentScale.FillWidth
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+            contentScale = ContentScale.FillWidth,
         )
         FlowRow(
-            modifier = Modifier
-                .padding(horizontal = 6.dp)
+            modifier =
+                Modifier
+                    .padding(horizontal = 6.dp),
         ) {
             repeat(cat.tags.size) {
                 SuggestionChip(
@@ -47,10 +53,9 @@ fun PetDetailScreenContent(modifier: Modifier, cat: Cat) {
                     onClick = { /*TODO*/ },
                     label = {
                         Text(text = cat.tags[it])
-                    })
+                    },
+                )
             }
         }
-
     }
-
 }

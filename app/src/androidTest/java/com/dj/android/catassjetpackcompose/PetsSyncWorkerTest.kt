@@ -25,27 +25,32 @@ class PetsSyncWorkerTest {
 
     @Before
     fun setUp() {
-        val config = Configuration.Builder()
-            .setMinimumLoggingLevel(loggingLevel = Log.DEBUG)
-            .setExecutor(executor = SynchronousExecutor())
-            .build()
+        val config =
+            Configuration.Builder()
+                .setMinimumLoggingLevel(loggingLevel = Log.DEBUG)
+                .setExecutor(executor = SynchronousExecutor())
+                .build()
 
         // Initialize workManager for instrumentation tests
         WorkManagerTestInitHelper.initializeTestWorkManager(
-            /* context = */ ApplicationProvider.getApplicationContext(),
-            /* configuration = */ config
+            // context =
+            ApplicationProvider.getApplicationContext(),
+            // configuration =
+            config,
         )
     }
 
     @Test
     fun testPetsSyncWorker() {
-        val syncPetsWorkRequest = OneTimeWorkRequestBuilder<PetsSyncWorker>()
-            .setConstraints(
-                constraints = Constraints.Builder()
-                    .setRequiredNetworkType(networkType = NetworkType.CONNECTED)
-                    .setRequiresBatteryNotLow(requiresBatteryNotLow = true)
-                    .build()
-            ).build()
+        val syncPetsWorkRequest =
+            OneTimeWorkRequestBuilder<PetsSyncWorker>()
+                .setConstraints(
+                    constraints =
+                        Constraints.Builder()
+                            .setRequiredNetworkType(networkType = NetworkType.CONNECTED)
+                            .setRequiresBatteryNotLow(requiresBatteryNotLow = true)
+                            .build(),
+                ).build()
 
         val workManager = WorkManager.getInstance(ApplicationProvider.getApplicationContext())
         val testDriver =
@@ -54,7 +59,7 @@ class PetsSyncWorkerTest {
         workManager.enqueueUniqueWork(
             "PetsSyncWorker",
             ExistingWorkPolicy.KEEP,
-            syncPetsWorkRequest
+            syncPetsWorkRequest,
         ).result.get()
 
         val workInfo = workManager.getWorkInfoById(syncPetsWorkRequest.id).get()
@@ -64,7 +69,6 @@ class PetsSyncWorkerTest {
 
         // simulate our constraints being met by using the testDriver instance that we created earlier
         testDriver.setAllConstraintsMet(syncPetsWorkRequest.id)
-
 
         val postRequirementWorkInfo = workManager.getWorkInfoById(syncPetsWorkRequest.id).get()
         // check if work is running.

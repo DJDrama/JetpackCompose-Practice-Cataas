@@ -2,7 +2,6 @@ package com.dj.android.catassjetpackcompose.presentation
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
@@ -19,16 +18,17 @@ import com.dj.android.catassjetpackcompose.presentation.navigation.Screens
 fun PetsNavigationRail(
     onFavoriteClicked: () -> Unit,
     onHomeClicked: () -> Unit,
-    onDrawerClicked: () -> Unit
+    onDrawerClicked: () -> Unit,
 ) {
-    val items = listOf(
-        Screens.PetsScreen,
-        Screens.FavoritePetsScreen
-    )
+    val items =
+        listOf(
+            Screens.PetsScreen,
+            Screens.FavoritePetsScreen,
+        )
     val selectedItem = remember { mutableStateOf(items[0]) }
 
     NavigationRail(
-        modifier = Modifier.fillMaxHeight()
+        modifier = Modifier.fillMaxHeight(),
     ) {
         NavigationRailItem(selected = false, onClick = onDrawerClicked, icon = {
             Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu Icon")
@@ -41,12 +41,15 @@ fun PetsNavigationRail(
             Icon(imageVector = Icons.Default.Home, contentDescription = "Home Icon")
         })
 
-        NavigationRailItem(selected = selectedItem.value == Screens.FavoritePetsScreen,
+        NavigationRailItem(
+            selected = selectedItem.value == Screens.FavoritePetsScreen,
             onClick = {
                 onFavoriteClicked()
                 selectedItem.value = Screens.FavoritePetsScreen
-            }, icon = {
+            },
+            icon = {
                 Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorite Icon")
-            })
+            },
+        )
     }
 }

@@ -1,6 +1,5 @@
 package com.dj.android.catassjetpackcompose.presentation.pets
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dj.android.catassjetpackcompose.data.model.Cat
@@ -13,9 +12,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PetsViewModel(
-    private val petsRepository: PetsRepository
+    private val petsRepository: PetsRepository,
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(PetsUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -44,29 +42,30 @@ class PetsViewModel(
         viewModelScope.launch {
             petsRepository.getPets().asResult().collect {
                 when (it) {
-                    is Result.Error -> _uiState.update { state ->
-                        state.copy(
-                            error = it.error,
-                            isLoading = false
-                        )
-                    }
+                    is Result.Error ->
+                        _uiState.update { state ->
+                            state.copy(
+                                error = it.error,
+                                isLoading = false,
+                            )
+                        }
 
-                    is Result.Success -> _uiState.update { state ->
-                        state.copy(
-                            pets = it.data,
-                            isLoading = false
-                        )
-                    }
+                    is Result.Success ->
+                        _uiState.update { state ->
+                            state.copy(
+                                pets = it.data,
+                                isLoading = false,
+                            )
+                        }
                 }
             }
         }
     }
-
 }
 
 data class PetsUiState(
     val isLoading: Boolean = false,
     val pets: List<Cat> = emptyList(),
     val favorites: List<Cat> = emptyList(),
-    val error: String? = null
+    val error: String? = null,
 )

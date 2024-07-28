@@ -15,6 +15,5 @@ data class Cat(
     val tags: List<String>,
     @SerialName("updatedAt")
     val updatedAt: String = "",
-
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
 )

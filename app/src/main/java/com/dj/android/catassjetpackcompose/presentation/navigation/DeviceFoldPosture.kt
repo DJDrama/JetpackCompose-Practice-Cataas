@@ -7,9 +7,10 @@ import kotlin.contracts.contract
 
 sealed interface DeviceFoldPosture {
     data class BookPosture(val hingePosition: Rect) : DeviceFoldPosture
+
     data class SeparatingPosture(
         val hingePosition: Rect,
-        val orientation: FoldingFeature.Orientation
+        val orientation: FoldingFeature.Orientation,
     ) : DeviceFoldPosture
 
     data object NormalPosture : DeviceFoldPosture
@@ -18,8 +19,8 @@ sealed interface DeviceFoldPosture {
 @OptIn(ExperimentalContracts::class)
 fun isBookPosture(foldFeature: FoldingFeature?): Boolean {
     contract { returns(true) implies (foldFeature != null) }
-    return foldFeature?.state == FoldingFeature.State.HALF_OPENED
-            && foldFeature.orientation == FoldingFeature.Orientation.VERTICAL
+    return foldFeature?.state == FoldingFeature.State.HALF_OPENED &&
+        foldFeature.orientation == FoldingFeature.Orientation.VERTICAL
 }
 
 @OptIn(ExperimentalContracts::class)

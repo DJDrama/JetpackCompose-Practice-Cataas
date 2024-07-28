@@ -17,17 +17,18 @@ import com.dj.android.catassjetpackcompose.presentation.navigation.Screens
 @Composable
 fun PetsBottomNavigationBar(
     onFavoriteClicked: () -> Unit,
-    onHomeClicked: () -> Unit
+    onHomeClicked: () -> Unit,
 ) {
-    val items = listOf(
-        Screens.PetsScreen,
-        Screens.FavoritePetsScreen
-    )
+    val items =
+        listOf(
+            Screens.PetsScreen,
+            Screens.FavoritePetsScreen,
+        )
     val selectedItem = remember { mutableStateOf(items[0]) }
 
     NavigationBar(
         modifier = Modifier.fillMaxWidth(),
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
     ) {
         NavigationBarItem(
             selected = selectedItem.value == Screens.PetsScreen,
@@ -38,9 +39,9 @@ fun PetsBottomNavigationBar(
             icon = {
                 Icon(
                     imageVector = Icons.Default.Home,
-                    contentDescription = "Home Icon"
+                    contentDescription = "Home Icon",
                 )
-            }
+            },
         )
 
         NavigationBarItem(
@@ -52,10 +53,9 @@ fun PetsBottomNavigationBar(
             icon = {
                 Icon(
                     imageVector = Icons.Default.Favorite,
-                    contentDescription = "Favorite Icon"
+                    contentDescription = "Favorite Icon",
                 )
-            }
+            },
         )
     }
-
 }

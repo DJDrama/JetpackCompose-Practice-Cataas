@@ -20,21 +20,28 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.dj.android.catassjetpackcompose.R
 
-fun checkIfPermissionGranted(context: Context, permission: String): Boolean {
+fun checkIfPermissionGranted(
+    context: Context,
+    permission: String,
+): Boolean {
     return ContextCompat.checkSelfPermission(
         context,
-        permission
+        permission,
     ) == PackageManager.PERMISSION_GRANTED
 }
 
-fun shouldShowPermissionRationale(context: Context, permission: String): Boolean {
+fun shouldShowPermissionRationale(
+    context: Context,
+    permission: String,
+): Boolean {
     val activity = context as Activity?
-    if (activity == null)
+    if (activity == null) {
         Log.d("Permissions", "Activity is null")
+    }
 
     return ActivityCompat.shouldShowRequestPermissionRationale(
         activity!!,
-        permission
+        permission,
     )
 }
 
@@ -42,7 +49,7 @@ fun shouldShowPermissionRationale(context: Context, permission: String): Boolean
 fun PermissionDialog(
     context: Context,
     permission: String,
-    permissionAction: (PermissionAction) -> Unit
+    permissionAction: (PermissionAction) -> Unit,
 ) {
     val isPermissionGranted = checkIfPermissionGranted(context = context, permission = permission)
     if (isPermissionGranted) {
@@ -78,7 +85,7 @@ fun PermissionDialog(
                     onClick = {
                         isDialogDismissed = true
                         permissionLauncher.launch(permission)
-                    }
+                    },
                 ) {
                     Text(text = stringResource(id = R.string.grant_access))
                 }
@@ -88,11 +95,11 @@ fun PermissionDialog(
                     onClick = {
                         isDialogDismissed = true
                         permissionAction(PermissionAction.PermissionDenied)
-                    }
+                    },
                 ) {
                     Text(text = stringResource(id = R.string.cancel))
                 }
-            }
+            },
         )
     } else {
         if (!isDialogDismissed) {

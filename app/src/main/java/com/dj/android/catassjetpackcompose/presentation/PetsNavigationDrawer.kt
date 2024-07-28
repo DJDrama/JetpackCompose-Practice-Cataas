@@ -29,68 +29,76 @@ import com.dj.android.catassjetpackcompose.presentation.navigation.Screens
 fun PetsNavigationDrawer(
     onFavoriteClicked: () -> Unit,
     onHomeClicked: () -> Unit,
-    onDrawerClicked: () -> Unit = {}
+    onDrawerClicked: () -> Unit = {},
 ) {
-    val items = listOf(
-        Screens.PetsScreen,
-        Screens.FavoritePetsScreen
-    )
-    val selectedItem = remember {
-        mutableStateOf(items[0])
-    }
+    val items =
+        listOf(
+            Screens.PetsScreen,
+            Screens.FavoritePetsScreen,
+        )
+    val selectedItem =
+        remember {
+            mutableStateOf(items[0])
+        }
     Column(
-        modifier = Modifier
-            .wrapContentWidth()
-            .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.inverseOnSurface)
-            .padding(16.dp)
+        modifier =
+            Modifier
+                .wrapContentWidth()
+                .fillMaxHeight()
+                .background(MaterialTheme.colorScheme.inverseOnSurface)
+                .padding(16.dp),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "Cats",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = MaterialTheme.colorScheme.primaryContainer,
             )
             IconButton(
-                onClick = onDrawerClicked
+                onClick = onDrawerClicked,
             ) {
                 Icon(
                     imageVector = Icons.Default.Menu,
-                    contentDescription = "Navigation Drawer Icon"
+                    contentDescription = "Navigation Drawer Icon",
                 )
             }
         }
-        NavigationDrawerItem(label = { Text(text = "Pets") },
+        NavigationDrawerItem(
+            label = { Text(text = "Pets") },
             selected =
-            selectedItem.value == Screens.PetsScreen, onClick = {
+                selectedItem.value == Screens.PetsScreen,
+            onClick = {
                 onHomeClicked()
                 selectedItem.value = Screens.PetsScreen
             },
             icon = {
                 Icon(
                     imageVector = Icons.Default.Home,
-                    contentDescription = "Home Icon"
+                    contentDescription = "Home Icon",
                 )
-            }
+            },
         )
-        NavigationDrawerItem(label = { Text(text = "Favorites") },
+        NavigationDrawerItem(
+            label = { Text(text = "Favorites") },
             selected =
-            selectedItem.value == Screens.FavoritePetsScreen, onClick = {
+                selectedItem.value == Screens.FavoritePetsScreen,
+            onClick = {
                 onFavoriteClicked()
                 selectedItem.value = Screens.FavoritePetsScreen
             },
             icon = {
                 Icon(
                     imageVector = Icons.Default.Favorite,
-                    contentDescription = "Favorite Icon"
+                    contentDescription = "Favorite Icon",
                 )
-            }
+            },
         )
     }
 }
