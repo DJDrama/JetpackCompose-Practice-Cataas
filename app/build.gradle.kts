@@ -96,4 +96,6 @@ dependencies {
 
     debugImplementation(libs.chucker.library)
     releaseImplementation(libs.chucker.library.no.op)
+
+    testImplementation(libs.bundles.test)
 }
