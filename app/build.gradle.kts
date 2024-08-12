@@ -23,13 +23,28 @@ android {
         }
     }
 
+ /*   signingConfigs {
+        create("release") {
+            storeFile = file("../keystore/packt.jks")
+            storePassword = "android"
+            keyAlias = "packt"
+            keyPassword = "android"
+        }
+    }*/
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+          //  signingConfig = signingConfigs.getByName("release")
+        }
+        debug {
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 
@@ -55,6 +70,8 @@ android {
     ksp {
         arg("room.schemaLocation", "$projectDir/schemas")
     }
+
+
 }
 
 dependencies {
