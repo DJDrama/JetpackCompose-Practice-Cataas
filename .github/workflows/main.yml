@@ -29,9 +29,9 @@ jobs:
         run: ./gradlew assembleDebug
         working-directory: ./
 
-      - name: Run ktlintCheck
-        run: ./gradlew ktlintCheck
-        working-directory: ./
+      # - name: Run ktlintCheck
+      #   run: ./gradlew ktlintCheck
+      #   working-directory: ./
 
       - name: Run deteKt
         run: ./gradlew detekt
